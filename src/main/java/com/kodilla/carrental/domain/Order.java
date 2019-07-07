@@ -35,4 +35,12 @@ public class Order {
     @Column(name = "PRIZE")
     @NotNull
     private Long prize;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
+
+    @OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinColumn(name = "CAR_ID")
+    private Car car;
 }
