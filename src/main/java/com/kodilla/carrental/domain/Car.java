@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Getter
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "CAR")
@@ -58,4 +58,17 @@ public class Car {
     @Column(name = "AVAILABILITY")
     @NotNull
     private boolean availability;
+
+    public Car(@NotNull String carClass, @NotNull String typeOfCar, @NotNull String producer, @NotNull String model, @NotNull Date dayOfProduction, @NotNull String equipment, @NotNull double pricePerDay, @NotNull String color, @NotNull int numberOfSeats, @NotNull boolean availability) {
+        this.carClass = carClass;
+        this.typeOfCar = typeOfCar;
+        this.producer = producer;
+        this.model = model;
+        this.dayOfProduction = dayOfProduction;
+        this.equipment = equipment;
+        this.pricePerDay = pricePerDay;
+        this.color = color;
+        this.numberOfSeats = numberOfSeats;
+        this.availability = availability;
+    }
 }

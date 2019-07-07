@@ -3,11 +3,15 @@ package com.kodilla.carrental.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -39,4 +43,20 @@ public class User {
 
     @Column(name = "STATUS")
     private boolean loginStatus;
+
+    @OneToMany(
+            targetEntity = Order.class,
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private List<Order> orderList = new ArrayList<>();
+
+    @OneToMany(
+            targetEntity = Invoice.class,
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private List<Invoice> invoiceList = new ArrayList<>();
 }
