@@ -1,9 +1,18 @@
 package com.kodilla.carrental.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDate;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "CAR_ORDER")
 public class Order {
@@ -13,28 +22,26 @@ public class Order {
     private Long id;
 
     @Column(name = "ORDER_NUMBER")
-    @NotNull
     private String orderNumber;
 
     @Column(name = "DATE_OF_ORDER")
     @NotNull
-    private Date dateOfOrder;
+    private LocalDate dateOfOrder;
 
     @Column(name = "DATE_OF_CAR_RENTAL")
     @NotNull
-    private Date dateOfCarRental;
+    private LocalDate dateOfCarRental;
 
     @Column(name = "DATE_OF_RETURN_CAR")
     @NotNull
-    private Date dateOfReturnCar;
+    private LocalDate dateOfReturnCar;
 
     @Column(name = "STATUS_OF_ORDER")
     @NotNull
     private boolean statusOrder;
 
     @Column(name = "PRIZE")
-    @NotNull
-    private Long prize;
+    private double prize;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
@@ -43,4 +50,13 @@ public class Order {
     @OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name = "CAR_ID")
     private Car car;
+
+    public Order(LocalDate dateOfCarRental, LocalDate dateOfReturnCar, User user, Car car) {
+        this.dateOfCarRental = dateOfCarRental;
+        this.dateOfReturnCar = dateOfReturnCar;
+        this.user = user;
+        this.car = car;
+        this.dateOfOrder = LocalDate.now();
+        this.statusOrder = false;
+    }
 }

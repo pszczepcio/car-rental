@@ -4,13 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CarDto {
+public class GetCarDto {
     private Long id;
     private String carClass;
     private String typeOfCar;
@@ -21,4 +24,5 @@ public class CarDto {
     private String color;
     private int numberOfSeats;
     private boolean availability;
+    private List<Long> additionalEquipmentId = new ArrayList<>();
 }

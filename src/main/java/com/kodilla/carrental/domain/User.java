@@ -59,4 +59,16 @@ public class User {
             fetch = FetchType.LAZY
     )
     private List<Invoice> invoiceList = new ArrayList<>();
+
+    public User(@NotNull String name, @NotNull String surname, @NotNull int phone,
+                @NotNull String eamil, @NotNull String password, boolean loginStatus) {
+        this.name = name;
+        this.surname = surname;
+        this.phone = phone;
+        this.eamil = eamil;
+        this.password = password;
+        this.loginStatus = loginStatus;
+        this.orderList = new ArrayList<>();
+        this.invoiceList = new ArrayList<>();
+    }
 }
