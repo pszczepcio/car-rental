@@ -9,9 +9,7 @@ import com.kodilla.carrental.exception.AdditionalEquipmentNotFoundException;
 import com.kodilla.carrental.exception.CarNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CarService {
@@ -40,8 +38,8 @@ public class CarService {
         return carDao.save(car);
     }
 
-    public Car addEquipmentToCar(final UpdateCarAndEquipment updateCarAndEquipment) throws AdditionalEquipmentNotFoundException, CarNotFoundException {
-        return addEquipment(updateCarAndEquipment);
+    public void addEquipmentToCar(final UpdateCarAndEquipment updateCarAndEquipment) throws AdditionalEquipmentNotFoundException, CarNotFoundException {
+         addEquipment(updateCarAndEquipment);
     }
 
     public Car deleteEquipmentFromCar(final UpdateCarAndEquipment updateCarAndEquipment) throws AdditionalEquipmentNotFoundException, CarNotFoundException {
@@ -65,15 +63,14 @@ public class CarService {
                     orElseThrow(CarNotFoundException::new));
             additionalEquipmentDao.save(additionalEquipment);
         }
-
         Car car = carDao.findById(updateCarAndEquipment.getCarId()).orElseThrow(CarNotFoundException::new);
         for (int i = 0 ; i < updateCarAndEquipment.getEguipmentIdList().size() ; i++) {
-            car.getAdditionalEquipmentList().remove(additionalEquipmentDao.findById(updateCarAndEquipment.getEguipmentIdList().get(i)).orElseThrow(AdditionalEquipmentNotFoundException::new));
+            car.getEquipments().remove(additionalEquipmentDao.findById(updateCarAndEquipment.getEguipmentIdList().get(i)).orElseThrow(AdditionalEquipmentNotFoundException::new));
         }
         return carDao.save(car);
     }
 
-    private Car addEquipment (final UpdateCarAndEquipment updateCarAndEquipment) throws AdditionalEquipmentNotFoundException, CarNotFoundException {
+    private void addEquipment (final UpdateCarAndEquipment updateCarAndEquipment) throws AdditionalEquipmentNotFoundException, CarNotFoundException {
 
         for (int i = 0 ; i < updateCarAndEquipment.getEguipmentIdList().size() ; i++){
             AdditionalEquipment additionalEquipment = additionalEquipmentDao.findById(updateCarAndEquipment.getEguipmentIdList().get(i)).
@@ -82,25 +79,27 @@ public class CarService {
                     orElseThrow(CarNotFoundException::new));
             additionalEquipmentDao.save(additionalEquipment);
         }
-
-        Car car = carDao.findById(updateCarAndEquipment.getCarId()).orElseThrow(CarNotFoundException::new);
+        Car car1 = new Car(carDao.findById(updateCarAndEquipment.getCarId()).orElseThrow(CarNotFoundException::new));
         for (int i = 0 ; i < updateCarAndEquipment.getEguipmentIdList().size() ; i++) {
-            car.getAdditionalEquipmentList().add(additionalEquipmentDao.findById(updateCarAndEquipment.getEguipmentIdList().get(i)).orElseThrow(AdditionalEquipmentNotFoundException::new));
+            car1.builder()
+                    .equipments(Collections.singletonList(additionalEquipmentDao.findById(updateCarAndEquipment.
+                            getEguipmentIdList().get(i)).orElseThrow(AdditionalEquipmentNotFoundException::new)))
+                    .build();
         }
-        return carDao.save(car);
+        carDao.save(car1);
     }
 
     private Car returnCar (final Long carId) throws CarNotFoundException, AdditionalEquipmentNotFoundException {
         Car car = carDao.findById(carId).orElseThrow(CarNotFoundException::new);
         car.setAvailability(true);
-        int equipmentListSize = car.getAdditionalEquipmentList().size();
+        int equipmentListSize = car.getEquipments().size();
         for (int i = 0 ; i < equipmentListSize ; i++) {
-            Long equipmentId = car.getAdditionalEquipmentList().get(i).getId();
+            Long equipmentId = car.getEquipments().get(i).getId();
             AdditionalEquipment additionalEquipment = additionalEquipmentDao.findById(equipmentId).orElseThrow(AdditionalEquipmentNotFoundException::new);
             additionalEquipment.getCarsList().remove(car);
             additionalEquipmentDao.save(additionalEquipment);
         }
-        car.setAdditionalEquipmentList(new ArrayList<>());
+        car.setEquipments(new ArrayList<>());
         return carDao.save(car);
     }
 }

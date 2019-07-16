@@ -51,7 +51,7 @@ public class CarMapper {
                 car.getColor(),
                 car.getNumberOfSeats(),
                 car.isAvailability(),
-                car.getAdditionalEquipmentList().stream()
+                car.getEquipments().stream()
                     .map(e -> e.getId())
                     .collect(Collectors.toList()));
     }

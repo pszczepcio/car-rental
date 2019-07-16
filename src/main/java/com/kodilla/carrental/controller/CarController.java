@@ -46,8 +46,8 @@ public class CarController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/car")
-    public GetCarDto updateCarEquipment(@RequestBody UpdateCarAndEquipment updateCarAndEquipment) throws CarNotFoundException, AdditionalEquipmentNotFoundException {
-         return carMapper.mapToGetCarDto(carService.addEquipmentToCar(updateCarAndEquipment));
+    public void updateCarEquipment(@RequestBody UpdateCarAndEquipment updateCarAndEquipment) throws CarNotFoundException, AdditionalEquipmentNotFoundException {
+        /* return carMapper.mapToGetCarDto*/carService.addEquipmentToCar(updateCarAndEquipment);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/car/equipment")

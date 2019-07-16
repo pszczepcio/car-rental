@@ -1,15 +1,12 @@
 package com.kodilla.carrental.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -59,12 +56,13 @@ public class Car {
     @NotNull
     private boolean availability;
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "carsList")
-    private List<AdditionalEquipment> additionalEquipmentList = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.REFRESH, mappedBy = "carsList")
+    @Builder.Default
+    private List<AdditionalEquipment> equipments = new ArrayList<>();
 
-    public Car(@NotNull String carClass, @NotNull String typeOfCar, @NotNull String producer,
-               @NotNull String model, @NotNull LocalDate dayOfProduction, @NotNull double pricePerDay,
-               @NotNull String color, @NotNull int numberOfSeats, @NotNull boolean availability) {
+    public Car(String carClass, String typeOfCar, String producer,
+               String model, LocalDate dayOfProduction, double pricePerDay,
+               String color, int numberOfSeats, boolean availability) {
         this.carClass = carClass;
         this.typeOfCar = typeOfCar;
         this.producer = producer;
@@ -74,6 +72,20 @@ public class Car {
         this.color = color;
         this.numberOfSeats = numberOfSeats;
         this.availability = availability;
-        this.additionalEquipmentList = new ArrayList<>();
+        this.equipments = new ArrayList<>();
+    }
+
+    public Car (Car car) {
+        this.carClass = car.getCarClass();
+        this.typeOfCar = car.getTypeOfCar();
+        this.producer = car.getProducer();
+        this.model = car.getModel();
+        this.dayOfProduction = car.getDayOfProduction();
+        this.pricePerDay = car.getPricePerDay();
+        this.color = car.getColor();
+        this.numberOfSeats = car.getNumberOfSeats();
+        this.availability = car.isAvailability();
+        List<AdditionalEquipment> equipmentList = new ArrayList<>();
+        this.equipments = equipmentList;
     }
 }
