@@ -9,12 +9,13 @@ import com.kodilla.carrental.exception.CarNotFoundException;
 import com.kodilla.carrental.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-
 public class OrderMapper {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -57,7 +58,6 @@ public class OrderMapper {
                 order.isStatusOrder(),
                 order.getPrize(),
                 order.getUser().getId(),
-                order.getCar().getId()
-        );
+                order.getCar().getId());
     }
 }

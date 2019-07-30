@@ -7,6 +7,7 @@ import com.kodilla.carrental.exception.CarNotFoundException;
 import com.kodilla.carrental.mapper.CarMapper;
 import com.kodilla.carrental.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -36,11 +37,12 @@ public class CarController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/cars", consumes = APPLICATION_JSON_VALUE)
-    public Car createCar(@RequestBody CreateCarDto createCarDto) {
-        return carService.saveCar(carMapper.mapToCar(createCarDto));
+    public void createCar(@RequestBody CreateCarDto createCarDto) {
+        /*return*/ carService.saveCar(carMapper.mapToCar(createCarDto));
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/cars")
+    @RequestMapping(method = RequestMethod.PUT, value = "/cars", consumes = APPLICATION_JSON_VALUE)
+    @ResponseBody
     public GetCarDto updateCarStatus(@RequestBody CarUpdateStatusDto carUpdateStatusDto) throws CarNotFoundException {
        return carMapper.mapToGetCarDto(carService.updateStatus(carUpdateStatusDto));
     }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1")
@@ -37,7 +38,7 @@ public class OrderController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/orders")
-    public OrderDto createOrder (@RequestBody CreateOrderDto createOrderDto) throws CarNotFoundException, UserNotFoundException, ParseException {
+    public OrderDto createOrder (@RequestBody CreateOrderDto createOrderDto) throws CarNotFoundException, UserNotFoundException {
         return orderMapper.mapToOrderDto(orderService.saveOrder(orderMapper.mapToOrder(createOrderDto)));
     }
 
@@ -45,11 +46,11 @@ public class OrderController {
     public void deleteOrder(@PathVariable Long orderId) {
         orderService.deleteOrder(orderId);
     }
-
-    @RequestMapping(method = RequestMethod.PUT, value = "/orders")
-    public OrderDto updateOrder (@RequestBody UpdateOrderStatus updateOrderStatus) throws OrderNotFoundException, UserNotFoundException {
-        Order order = orderService.getOrder(updateOrderStatus.getOrderId()).orElseThrow(OrderNotFoundException::new);
-        order.setStatusOrder(updateOrderStatus.isOrderStatus());
-        return orderMapper.mapToOrderDto(orderService.saveOrder(order));
+    
+    @RequestMapping(method = RequestMethod.PUT, value = "/orders/{orderID}/status/{status}")
+    public OrderDto updateOrder (@PathVariable Long orderID, @PathVariable boolean status) throws OrderNotFoundException, UserNotFoundException {
+        Optional<Order> order = orderService.getOrder(orderID);
+        order.get().setStatusOrder(status);
+        return orderMapper.mapToOrderDto(orderService.saveUpdateStatusOrder(order.orElseThrow(OrderNotFoundException::new)));
     }
 }

@@ -59,33 +59,4 @@ public class Car {
     @ManyToMany(cascade = CascadeType.REFRESH, mappedBy = "carsList")
     @Builder.Default
     private List<AdditionalEquipment> equipments = new ArrayList<>();
-
-    public Car(String carClass, String typeOfCar, String producer,
-               String model, LocalDate dayOfProduction, double pricePerDay,
-               String color, int numberOfSeats, boolean availability) {
-        this.carClass = carClass;
-        this.typeOfCar = typeOfCar;
-        this.producer = producer;
-        this.model = model;
-        this.dayOfProduction = dayOfProduction;
-        this.pricePerDay = pricePerDay;
-        this.color = color;
-        this.numberOfSeats = numberOfSeats;
-        this.availability = availability;
-        this.equipments = new ArrayList<>();
-    }
-
-    public Car (Car car) {
-        this.carClass = car.getCarClass();
-        this.typeOfCar = car.getTypeOfCar();
-        this.producer = car.getProducer();
-        this.model = car.getModel();
-        this.dayOfProduction = car.getDayOfProduction();
-        this.pricePerDay = car.getPricePerDay();
-        this.color = car.getColor();
-        this.numberOfSeats = car.getNumberOfSeats();
-        this.availability = car.isAvailability();
-        List<AdditionalEquipment> equipmentList = new ArrayList<>();
-        this.equipments = equipmentList;
-    }
 }

@@ -10,6 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetInvoiceDto {
-    private Long orderId;
+    private Long id;
     private String invoiceNumber;
 }

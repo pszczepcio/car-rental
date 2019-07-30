@@ -5,6 +5,7 @@ import com.kodilla.carrental.domain.Car;
 import com.kodilla.carrental.domain.Mail;
 import com.kodilla.carrental.domain.Order;
 import com.kodilla.carrental.domain.User;
+import com.kodilla.carrental.exception.OrderNotFoundException;
 import com.kodilla.carrental.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,19 @@ public class OrderService {
         return new Order();
     }
 
+    public Order saveUpdateStatusOrder(final Order order) throws OrderNotFoundException {
+        List<Order> updateStatusOrder = getOrders();
+        Long sizeOrder = updateStatusOrder.stream()
+                .filter(orders -> orders.getId().equals(order.getId()))
+                .count();
+        if (sizeOrder == 1) {
+            Order statusOrder = getOrder(order.getId()).orElseThrow(OrderNotFoundException::new);
+            statusOrder.setStatusOrder(order.isStatusOrder());
+            return orderDao.save(statusOrder);
+        }
+       return new Order();
+    }
+
     public List<Order> getOrders() {
         return orderDao.findAll();
     }
@@ -88,7 +102,7 @@ public class OrderService {
                                   && newOrder.getCar().isAvailability())))
                 .map(order -> order.getCar())
                 .collect(Collectors.toList());
-        if(availableCars.size() != 0) {
+        if(availableCars.size() != 0 || orderList.size() == 0) {
             return true;
         }
         return false;
