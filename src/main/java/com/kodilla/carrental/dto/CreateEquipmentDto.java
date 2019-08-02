@@ -18,9 +18,8 @@ public class CreateEquipmentDto {
     private double prize;
     private List<Long> carid = new ArrayList<>();
 
-    public CreateEquipmentDto(String equipment, double prize, List<Long> carid) {
+    public CreateEquipmentDto(String equipment, double prize) {
         this.equipment = equipment;
         this.prize = prize;
-        this.carid = carid;
     }
 }

@@ -26,19 +26,19 @@ public class CreateCarDto {
     private boolean availability;
     private List<Long> equipmentIdDtoList;
 
-//    public CreateCarDto(String carClass, String typeOfCar, String producer,
-//                        String model, LocalDate dayOfProduction, double pricePerDay,
-//                        String color, int numberOfSeats, boolean availability) {
-//
-//        this.carClass = carClass;
-//        this.typeOfCar = typeOfCar;
-//        this.producer = producer;
-//        this.model = model;
-//        this.dayOfProduction = dayOfProduction;
-//        this.pricePerDay = pricePerDay;
-//        this.color = color;
-//        this.numberOfSeats = numberOfSeats;
-//        this.availability = availability;
-//        this.equipmentIdDtoList = new ArrayList<>();
-//    }
+    public CreateCarDto(String carClass, String typeOfCar, String producer,
+                        String model, LocalDate dayOfProduction, double pricePerDay,
+                        String color, int numberOfSeats, boolean availability) {
+
+        this.carClass = carClass;
+        this.typeOfCar = typeOfCar;
+        this.producer = producer;
+        this.model = model;
+        this.dayOfProduction = dayOfProduction;
+        this.pricePerDay = pricePerDay;
+        this.color = color;
+        this.numberOfSeats = numberOfSeats;
+        this.availability = availability;
+        this.equipmentIdDtoList = new ArrayList<>();
+    }
 }
