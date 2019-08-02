@@ -36,7 +36,7 @@ public class OrderService {
     public Order saveOrder(final Order order) throws UserNotFoundException {
         Order newOrder = new Order();
         if(checkingAvailabilityCar(order)) {
-            User user = userService.getUserDto(order.getUser().getId());
+            User user = userService.getUser(order.getUser().getId());
             user.getOrderList().add(order);
             newOrder = orderDao.save(order);
             fillingOrder(newOrder);
@@ -94,16 +94,19 @@ public class OrderService {
         List<Order> orderList = orderDao.findAll();
         LocalDate carRental = newOrder.getDateOfCarRental();
         LocalDate carReturn = newOrder.getDateOfReturnCar();
-        List<Car> availableCars = orderList.stream()
-                .filter(order ->
-                        ((carRental.isBefore(order.getDateOfCarRental()) && carReturn.isBefore(order.getDateOfCarRental())
-                                && newOrder.getCar().isAvailability()) ||
-                          (carRental.isAfter(order.getDateOfReturnCar()) && carReturn.isAfter(order.getDateOfReturnCar())
-                                  && newOrder.getCar().isAvailability())))
-                .map(order -> order.getCar())
-                .collect(Collectors.toList());
-        if(availableCars.size() != 0 || orderList.size() == 0) {
-            return true;
+        LocalDate today = LocalDate.now();
+        if ((carRental.isEqual(today) || carRental.isAfter(today)) && newOrder.getCar().isAvailability()) {
+            List<Order> orders = orderList.stream()
+                    .filter(order -> (((carRental.isAfter(order.getDateOfCarRental())||carRental.isEqual(order.getDateOfCarRental())) &&
+                            (carRental.isBefore(order.getDateOfReturnCar())||carRental.isEqual(order.getDateOfReturnCar())) &&
+                            order.getCar().getId().equals(newOrder.getCar().getId()))
+                            || ((carReturn.isAfter(order.getDateOfCarRental())||carReturn.isEqual(order.getDateOfCarRental())) &&
+                            (carReturn.isBefore(order.getDateOfReturnCar()) || carReturn.isEqual(order.getDateOfReturnCar())) &&
+                            order.getCar().getId().equals(newOrder.getCar().getId()))))
+                    .collect(Collectors.toList());
+            if (orders.size() == 0 || orderList.size() == 0) {
+                return true;
+            }
         }
         return false;
     }

@@ -3,6 +3,7 @@ package com.kodilla.carrental.mapper;
 import com.kodilla.carrental.domain.User;
 import com.kodilla.carrental.dto.CreateUserDto;
 import com.kodilla.carrental.dto.UserDto;
+import com.kodilla.carrental.dto.UserDtoList;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,9 +22,9 @@ public class UserMapper {
                 false);
     }
 
-    public List<UserDto> getUsersDtoList(final List<User> userList) {
+    public List<UserDtoList> getUsersDtoList(final List<User> userList) {
         return userList.stream()
-                .map(u -> new UserDto(
+                .map(u -> new UserDtoList(
                         u.getId(),
                         u.getName(),
                         u.getSurname(),

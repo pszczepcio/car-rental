@@ -41,10 +41,10 @@ public class CarController {
         /*return*/ carService.saveCar(carMapper.mapToCar(createCarDto));
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/cars", consumes = APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.PUT, value = "/car/{carId}/status/{status}", consumes = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public GetCarDto updateCarStatus(@RequestBody CarUpdateStatusDto carUpdateStatusDto) throws CarNotFoundException {
-       return carMapper.mapToGetCarDto(carService.updateStatus(carUpdateStatusDto));
+    public GetCarDto updateCarStatus(@PathVariable Long carId, @PathVariable boolean status) throws CarNotFoundException {
+       return carMapper.mapToGetCarDto(carService.updateStatus(carId, status));
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/car")

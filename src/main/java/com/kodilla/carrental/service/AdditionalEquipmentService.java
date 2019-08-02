@@ -3,10 +3,13 @@ import com.kodilla.carrental.dao.AdditionalEquipmentDao;
 import com.kodilla.carrental.domain.AdditionalEquipment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class AdditionalEquipmentService {
 
     @Autowired
@@ -20,7 +23,7 @@ public class AdditionalEquipmentService {
         return additionalEquipmentDao.findById(id);
     }
 
-    public List<AdditionalEquipment> getEquipmentDtoList() {
+    public List<AdditionalEquipment> getEquipmentList() {
         return additionalEquipmentDao.findAll();
     }
 

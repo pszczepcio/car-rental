@@ -38,7 +38,7 @@ public class OrderController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/orders")
-    public OrderDto createOrder (@RequestBody CreateOrderDto createOrderDto) throws CarNotFoundException, UserNotFoundException {
+    public OrderDto createOrder (@RequestBody CreateOrderDto createOrderDto) throws CarNotFoundException, UserNotFoundException, OrderNotFoundException {
         return orderMapper.mapToOrderDto(orderService.saveOrder(orderMapper.mapToOrder(createOrderDto)));
     }
 

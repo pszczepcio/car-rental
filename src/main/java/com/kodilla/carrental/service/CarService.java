@@ -9,9 +9,12 @@ import com.kodilla.carrental.exception.AdditionalEquipmentNotFoundException;
 import com.kodilla.carrental.exception.CarNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
+@Transactional
 public class CarService {
 
     @Autowired
@@ -32,9 +35,9 @@ public class CarService {
         return carDao.findById(id);
     }
 
-    public Car updateStatus(final CarUpdateStatusDto carUpdateStatusDto) throws CarNotFoundException {
-        Car car = carDao.findById(carUpdateStatusDto.getId()).orElseThrow(CarNotFoundException::new);
-        car.setAvailability(carUpdateStatusDto.isAvailability());
+    public Car updateStatus(final Long id, final boolean status) throws CarNotFoundException {
+        Car car = carDao.findById(id).orElseThrow(CarNotFoundException::new);
+        car.setAvailability(status);
         return carDao.save(car);
     }
 

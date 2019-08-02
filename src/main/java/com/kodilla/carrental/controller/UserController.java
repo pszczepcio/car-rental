@@ -3,6 +3,7 @@ package com.kodilla.carrental.controller;
 import com.kodilla.carrental.domain.User;
 import com.kodilla.carrental.dto.CreateUserDto;
 import com.kodilla.carrental.dto.UserDto;
+import com.kodilla.carrental.dto.UserDtoList;
 import com.kodilla.carrental.exception.UserNotFoundException;
 import com.kodilla.carrental.mapper.UserMapper;
 import com.kodilla.carrental.service.UserService;
@@ -23,13 +24,13 @@ public class UserController {
     private UserMapper userMapper;
 
     @RequestMapping(method = RequestMethod.GET, value = "/users")
-    public List<UserDto> getUsers(){
-        return userMapper.getUsersDtoList(userService.getUsersDtoList());
+    public List<UserDtoList> getUsers(){
+        return userMapper.getUsersDtoList(userService.getUsersList());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/users/{userId}")
     public UserDto getUserDto (@PathVariable Long userId) throws UserNotFoundException {
-        return userMapper.mapToUserDto(userService.getUserDto(userId));
+        return userMapper.mapToUserDto(userService.getUser(userId));
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/users")

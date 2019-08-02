@@ -6,9 +6,12 @@ import com.kodilla.carrental.domain.User;
 import com.kodilla.carrental.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserService {
     private static final String SUBJECT = "New account in Car Rental";
 
@@ -32,11 +35,11 @@ public class UserService {
         return new User();
     }
 
-    public List<User> getUsersDtoList() {
+    public List<User> getUsersList() {
         return userDao.findAll();
     }
 
-    public User getUserDto(final Long id) throws UserNotFoundException {
+    public User getUser(final Long id) throws UserNotFoundException {
         return userDao.findById(id).orElseThrow(UserNotFoundException::new);
     }
 

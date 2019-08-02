@@ -26,7 +26,7 @@ public class AdditionalEquipmentController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/equipments")
     public List<GetEquipmentDto> getEquipmentList() {
-        return additionalEquipmentMapper.mapToEquipmentDtoList(additionalEquipmentService.getEquipmentDtoList());
+        return additionalEquipmentMapper.mapToEquipmentDtoList(additionalEquipmentService.getEquipmentList());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/equipments/{equipmentsId}")

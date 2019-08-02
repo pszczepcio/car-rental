@@ -27,12 +27,12 @@ public class CalendarScheduler {
 
     private LocalDate today = LocalDate.now();
 
-    @Scheduled/*(cron = "0 0 22 * * *")*/ (fixedDelay = 10000)
+    @Scheduled(cron = "0 0 22 * * *") //(fixedDelay = 1000)
     public void controlTheCarStatus() throws CarNotFoundException {
         LOGGER.info("The availability of cars has started");
         List<Order> orderList = orderDao.findAll();
-        changeStatusToUnavailable(orderList);
         changeStatusToAvailable(orderList);
+        changeStatusToUnavailable(orderList);
         LOGGER.info("The availability of cars has been finished");
     }
 
@@ -51,7 +51,7 @@ public class CalendarScheduler {
 
     private void changeStatusToAvailable(final List<Order> orderList) throws CarNotFoundException {
         List<Car> carAvailableList = orderList.stream()
-                .filter(order -> (today.isBefore(order.getDateOfCarRental()) || (today.isAfter(order.getDateOfReturnCar()))))
+                .filter(order -> (today.isBefore(order.getDateOfCarRental()) || today.isAfter(order.getDateOfReturnCar())))
                 .map(order -> order.getCar())
                 .collect(Collectors.toList());
         for (int i = 0 ; i <carAvailableList.size() ; i++) {
