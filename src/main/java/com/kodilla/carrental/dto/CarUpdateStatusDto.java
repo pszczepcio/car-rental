@@ -18,4 +18,13 @@ public class CarUpdateStatusDto {
 
     @JsonProperty("availability")
     private boolean availability;
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class WeatherDto {
+        private String cod;
+        private String message;
+        private String cnt;
+    }
 }

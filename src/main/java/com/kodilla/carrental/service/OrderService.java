@@ -1,10 +1,10 @@
 package com.kodilla.carrental.service;
 
 import com.kodilla.carrental.dao.OrderDao;
-import com.kodilla.carrental.domain.Car;
-import com.kodilla.carrental.domain.Mail;
-import com.kodilla.carrental.domain.Order;
-import com.kodilla.carrental.domain.User;
+import com.kodilla.carrental.domain.*;
+import com.kodilla.carrental.dto.UpdateCarAndEquipment;
+import com.kodilla.carrental.exception.AdditionalEquipmentNotFoundException;
+import com.kodilla.carrental.exception.CarNotFoundException;
 import com.kodilla.carrental.exception.OrderNotFoundException;
 import com.kodilla.carrental.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,11 +32,14 @@ public class OrderService {
     private CarService carService;
 
     @Autowired
+    private AdditionalEquipmentService additionalEquipmentService;
+
+    @Autowired
     private SimpleEmailService emailService;
 
     public Order saveOrder(final Order order) throws UserNotFoundException {
         Order newOrder = new Order();
-        if(checkingAvailabilityCar(order)) {
+        if (checkingAvailabilityCar(order)) {
             User user = userService.getUser(order.getUser().getId());
             user.getOrderList().add(order);
             newOrder = orderDao.save(order);
@@ -63,7 +67,7 @@ public class OrderService {
             statusOrder.setStatusOrder(order.isStatusOrder());
             return orderDao.save(statusOrder);
         }
-       return new Order();
+        return new Order();
     }
 
     public List<Order> getOrders() {
@@ -78,12 +82,19 @@ public class OrderService {
         orderDao.deleteById(id);
     }
 
+    public void activatingOrder(Long orderId) throws OrderNotFoundException, AdditionalEquipmentNotFoundException, CarNotFoundException {
+        Order order = getOrder(orderId).orElseThrow(OrderNotFoundException::new);
+        String equipments = order.getEquipments();
+        carPreparation(order.getCar().getId(),equipmentPreparation(equipments));
+    }
+
     private void fillingOrder (Order order) {
         double prizePerDay = carService.getCar(order.getCar().getId()).get().getPricePerDay();
         LocalDate rentalDate = order.getDateOfCarRental();
         LocalDate returnDate = order.getDateOfReturnCar();
         double differenceOfDays = ChronoUnit.DAYS.between(rentalDate, returnDate);
-        double prize = prizePerDay * differenceOfDays;
+        double equipmentPrize =  calculationEquipmentPrice(order.getEquipments()) * differenceOfDays;
+        double prize = prizePerDay * differenceOfDays + equipmentPrize;
         String orderNumber = "Order/" + LocalDate.now().toString() +"/" + order.getId();
         order.setOrderNumber(orderNumber);
         order.setPrize(prize);
@@ -109,5 +120,31 @@ public class OrderService {
             }
         }
         return false;
+    }
+
+    private List<Long> equipmentPreparation(final String equipments) {
+        List<AdditionalEquipment> additionalEquipmentList = additionalEquipmentService.getEquipmentList();
+         List<Long> equipmentsIdList = additionalEquipmentList.stream()
+                .filter(a -> equipments.contains(a.getEquipment()))
+                .map(a -> a.getId())
+                .collect(Collectors.toList());
+         return  equipmentsIdList;
+    }
+
+    private void carPreparation(final Long carId , List<Long> equipmentsIdList) throws CarNotFoundException, AdditionalEquipmentNotFoundException {
+        UpdateCarAndEquipment updateCarAndEquipment = new UpdateCarAndEquipment(
+                equipmentsIdList,
+                carId);
+        carService.addEquipmentToCar(updateCarAndEquipment);
+    }
+
+    private double calculationEquipmentPrice(final String equipments) {
+        double prize = 0;
+        List<AdditionalEquipment> additionalEquipmentList = additionalEquipmentService.getEquipmentList();
+        prize = additionalEquipmentList.stream()
+                .filter(a -> equipments.contains(a.getEquipment()))
+                .mapToDouble(a -> a.getPrize())
+                .sum();
+        return prize;
     }
 }

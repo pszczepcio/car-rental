@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,4 +18,5 @@ public class CreateOrderDto {
     private LocalDate dateOfReturnCar;
     private Long userId;
     private Long carId;
+    private String equipments;
 }

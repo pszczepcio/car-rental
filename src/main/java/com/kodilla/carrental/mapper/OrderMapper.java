@@ -1,10 +1,13 @@
 package com.kodilla.carrental.mapper;
 
+import com.kodilla.carrental.dao.AdditionalEquipmentDao;
 import com.kodilla.carrental.dao.CarDao;
 import com.kodilla.carrental.dao.UserDao;
+import com.kodilla.carrental.domain.AdditionalEquipment;
 import com.kodilla.carrental.domain.Order;
 import com.kodilla.carrental.dto.CreateOrderDto;
 import com.kodilla.carrental.dto.OrderDto;
+import com.kodilla.carrental.exception.AdditionalEquipmentNotFoundException;
 import com.kodilla.carrental.exception.CarNotFoundException;
 import com.kodilla.carrental.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +15,13 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@Transactional
 public class OrderMapper {
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @Autowired
     private UserDao userDao;
@@ -25,12 +29,17 @@ public class OrderMapper {
     @Autowired
     private CarDao carDao;
 
+    @Autowired
+    private AdditionalEquipmentDao additionalEquipmentDao;
+
     public Order mapToOrder(final CreateOrderDto createOrderDto) throws UserNotFoundException, CarNotFoundException {
-         return new Order(
+        Order order = new Order(
                 createOrderDto.getDateOfCarRental(),
                 createOrderDto.getDateOfReturnCar(),
-         userDao.findById(createOrderDto.getUserId()).orElseThrow(UserNotFoundException::new),
-         carDao.findById(createOrderDto.getCarId()).orElseThrow(CarNotFoundException::new));
+                userDao.findById(createOrderDto.getUserId()).orElseThrow(UserNotFoundException::new),
+                carDao.findById(createOrderDto.getCarId()).orElseThrow(CarNotFoundException::new));
+        order.setEquipments(createOrderDto.getEquipments());
+        return order;
     }
 
     public List<OrderDto> mapToOrderDtoList(final List<Order> orderList) {
@@ -44,7 +53,8 @@ public class OrderMapper {
                         o.isStatusOrder(),
                         o.getPrize(),
                         o.getUser().getId(),
-                        o.getCar().getId()))
+                        o.getCar().getId(),
+                        o.getEquipments()))
                 .collect(Collectors.toList());
     }
 
@@ -58,6 +68,7 @@ public class OrderMapper {
                 order.isStatusOrder(),
                 order.getPrize(),
                 order.getUser().getId(),
-                order.getCar().getId());
+                order.getCar().getId(),
+                order.getEquipments());
     }
 }

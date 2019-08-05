@@ -49,7 +49,7 @@ public class CarController {
 
     @RequestMapping(method = RequestMethod.PUT, value = "/car")
     public void updateCarEquipment(@RequestBody UpdateCarAndEquipment updateCarAndEquipment) throws CarNotFoundException, AdditionalEquipmentNotFoundException {
-        /* return carMapper.mapToGetCarDto*/carService.addEquipmentToCar(updateCarAndEquipment);
+       carService.addEquipmentToCar(updateCarAndEquipment);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/car/equipment")
@@ -65,5 +65,10 @@ public class CarController {
     @RequestMapping(method = RequestMethod.PUT, value = "/cars/{carId}")
     public GetCarDto returningTheCar (@PathVariable Long carId) throws CarNotFoundException, AdditionalEquipmentNotFoundException {
         return carMapper.mapToGetCarDto(carService.returnCarToRental(carId));
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/cars/car/{carId}/prize/{prize}")
+    public GetCarDto updatePrize(@PathVariable Long carId, @PathVariable double prize) throws CarNotFoundException {
+        return carMapper.mapToGetCarDto(carService.updatePrize(carId,prize));
     }
 }

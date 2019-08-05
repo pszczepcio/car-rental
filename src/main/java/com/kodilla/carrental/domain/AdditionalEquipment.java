@@ -34,6 +34,14 @@ public class AdditionalEquipment {
     )
     private List<Car> carsList = new ArrayList<>();
 
+//    @ManyToMany(cascade = CascadeType.REFRESH)
+//    @JoinTable(
+//            name = "join_order_equipmnet",
+//            joinColumns = {@JoinColumn(name = "ADDITIONAL_EQUIPMENT_ID", referencedColumnName = "ADDITIONAL_EQUIPMENT_ID")},
+//            inverseJoinColumns = {@JoinColumn(name = "ORDER_ID", referencedColumnName = "ORDER_ID")}
+//    )
+//    private List<Order> orderList = new ArrayList<>();
+
     public AdditionalEquipment(String equipment, double prize) {
         this.equipment = equipment;
         this.prize = prize;

@@ -8,6 +8,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,6 +21,7 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ORDER_ID")
     private Long id;
 
     @Column(name = "ORDER_NUMBER")
@@ -42,6 +45,9 @@ public class Order {
 
     @Column(name = "PRIZE")
     private double prize;
+
+    @Column(name = "EQUIPMENTS")
+    private String equipments;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")

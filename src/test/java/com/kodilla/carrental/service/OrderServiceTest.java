@@ -255,6 +255,11 @@ public class OrderServiceTest {
 
         //Then
         assertNull(order.getId());
+
+        //Cleanup
+        userService.deleteUser(user.getId());
+        carService.deleteCar(car.getId());
+
     }
 
 

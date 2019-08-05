@@ -4,6 +4,7 @@ import com.kodilla.carrental.domain.Order;
 import com.kodilla.carrental.dto.CreateOrderDto;
 import com.kodilla.carrental.dto.OrderDto;
 import com.kodilla.carrental.dto.UpdateOrderStatus;
+import com.kodilla.carrental.exception.AdditionalEquipmentNotFoundException;
 import com.kodilla.carrental.exception.CarNotFoundException;
 import com.kodilla.carrental.exception.OrderNotFoundException;
 import com.kodilla.carrental.exception.UserNotFoundException;
@@ -38,7 +39,7 @@ public class OrderController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/orders")
-    public OrderDto createOrder (@RequestBody CreateOrderDto createOrderDto) throws CarNotFoundException, UserNotFoundException, OrderNotFoundException {
+    public OrderDto createOrder (@RequestBody CreateOrderDto createOrderDto) throws CarNotFoundException, UserNotFoundException, AdditionalEquipmentNotFoundException {
         return orderMapper.mapToOrderDto(orderService.saveOrder(orderMapper.mapToOrder(createOrderDto)));
     }
 
@@ -48,9 +49,14 @@ public class OrderController {
     }
     
     @RequestMapping(method = RequestMethod.PUT, value = "/orders/{orderID}/status/{status}")
-    public OrderDto updateOrder (@PathVariable Long orderID, @PathVariable boolean status) throws OrderNotFoundException, UserNotFoundException {
+    public OrderDto updateOrder (@PathVariable Long orderID, @PathVariable boolean status) throws OrderNotFoundException {
         Optional<Order> order = orderService.getOrder(orderID);
         order.get().setStatusOrder(status);
         return orderMapper.mapToOrderDto(orderService.saveUpdateStatusOrder(order.orElseThrow(OrderNotFoundException::new)));
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/orders/activation/{orderID}")
+    public void activateOrder (@PathVariable Long orderID) throws OrderNotFoundException, CarNotFoundException, AdditionalEquipmentNotFoundException {
+         orderService.activatingOrder(orderID);
     }
 }
