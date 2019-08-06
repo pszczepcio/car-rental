@@ -44,7 +44,7 @@ public class UserMapperTest {
         assertEquals("Piotrek", user.getName());
         assertEquals("Kowalski", user.getSurname());
         assertEquals(123456789, user.getPhone());
-        assertEquals("piotrek@eamil.com", user.getEamil());
+        assertEquals("piotrek@eamil.com", user.getEmail());
         assertEquals("password", user.getPassword());
     }
 
@@ -94,8 +94,8 @@ public class UserMapperTest {
         assertEquals("Kopacz", userDtoList2.getSurname());
         assertEquals(111111111, userDtoList1.getPhone());
         assertEquals(222222222, userDtoList2.getPhone());
-        assertEquals("piotrek@eamil.com", userDtoList1.getEamil());
-        assertEquals("marcin@eamil.com", userDtoList2.getEamil());
+        assertEquals("piotrek@eamil.com", userDtoList1.getEmail());
+        assertEquals("marcin@eamil.com", userDtoList2.getEmail());
         assertEquals(false, userDtoList1.isLoginStatus());
         assertEquals(false, userDtoList2.isLoginStatus());
     }
@@ -159,6 +159,6 @@ public class UserMapperTest {
         assertEquals(111111111, userDto.getPhone());
         assertEquals(false, userDto.isLoginStatus());
         assertEquals("Piotrek", userDto.getName());
-        assertEquals("piotrek@eamil.com", userDto.getEamil());
+        assertEquals("piotrek@eamil.com", userDto.getEmail());
     }
 }

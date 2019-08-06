@@ -14,6 +14,6 @@ public class UserDtoList {
         private String name;
         private String surname;
         private int phone;
-        private String eamil;
+        private String email;
         private boolean loginStatus;
     }

@@ -126,7 +126,7 @@ public class CalendarScheduler {
         LOGGER.info("The sending of discount offers on cabriolets has begun");
         List<User> userList = userService.getUsersList();
         List<String> emailList = userList.stream()
-                .map(user -> user.getEamil())
+                .map(user -> user.getEmail())
                 .collect(Collectors.toList());
         for (int i = 0 ; i < emailList.size() ; i++){
             emailService.send(new Mail(

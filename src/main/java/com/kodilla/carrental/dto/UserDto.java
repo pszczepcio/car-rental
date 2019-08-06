@@ -17,7 +17,7 @@ public class UserDto {
     private String name;
     private String surname;
     private int phone;
-    private String eamil;
+    private String email;
     private boolean loginStatus;
     private List<Long> orderIdList = new ArrayList<>();
     private List<Long> invoiceIdList = new ArrayList<>();
@@ -27,7 +27,7 @@ public class UserDto {
         this.name = name;
         this.surname = surname;
         this.phone = phone;
-        this.eamil = eamil;
+        this.email = eamil;
         this.loginStatus = loginStatus;
     }
 }

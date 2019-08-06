@@ -90,7 +90,7 @@ public class InvoiceMapperTest {
         assertEquals("name", invoice.getUser().getName());
         assertEquals("surname", invoice.getUser().getSurname());
         assertEquals(123456789, invoice.getUser().getPhone());
-        assertEquals("email@email.com", invoice.getUser().getEamil());
+        assertEquals("email@email.com", invoice.getUser().getEmail());
         assertEquals("password", invoice.getUser().getPassword());
         assertEquals("Premium", invoice.getOrder().getCar().getCarClass());
         assertEquals(LocalDate.now().plusDays(10), invoice.getOrder().getDateOfCarRental());

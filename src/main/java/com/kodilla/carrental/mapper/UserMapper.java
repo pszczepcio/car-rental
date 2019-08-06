@@ -29,7 +29,7 @@ public class UserMapper {
                         u.getName(),
                         u.getSurname(),
                         u.getPhone(),
-                        u.getEamil(),
+                        u.getEmail(),
                         u.isLoginStatus()))
                 .collect(Collectors.toList());
     }
@@ -40,7 +40,7 @@ public class UserMapper {
                 user.getName(),
                 user.getSurname(),
                 user.getPhone(),
-                user.getEamil(),
+                user.getEmail(),
                 user.isLoginStatus(),
                 user.getOrderList().stream()
                         .map(o -> o.getId())

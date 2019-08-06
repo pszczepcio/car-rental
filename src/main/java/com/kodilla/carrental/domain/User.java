@@ -35,7 +35,7 @@ public class User {
 
     @Column(name = "E_MAIL")
     @NotNull
-    private String eamil;
+    private String email;
 
     @Column(name = "USER_PASSWORD")
     @NotNull
@@ -65,7 +65,7 @@ public class User {
         this.name = name;
         this.surname = surname;
         this.phone = phone;
-        this.eamil = eamil;
+        this.email = eamil;
         this.password = password;
         this.loginStatus = loginStatus;
         this.orderList = new ArrayList<>();

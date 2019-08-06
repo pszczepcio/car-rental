@@ -37,8 +37,8 @@ public class CarController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/cars", consumes = APPLICATION_JSON_VALUE)
-    public void createCar(@RequestBody CreateCarDto createCarDto) {
-        /*return*/ carService.saveCar(carMapper.mapToCar(createCarDto));
+    public Car createCar(@RequestBody CreateCarDto createCarDto) {
+        return carService.saveCar(carMapper.mapToCar(createCarDto));
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/car/{carId}/status/{status}", consumes = APPLICATION_JSON_VALUE)

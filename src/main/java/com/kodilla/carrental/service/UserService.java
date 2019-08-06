@@ -25,7 +25,7 @@ public class UserService {
         User newUser = userDao.save(user);
         if (newUser.getId() != null) {
             emailService.send(new Mail(
-                    newUser.getEamil(),
+                    newUser.getEmail(),
                     SUBJECT,
                     "Hello " + newUser.getName() + "\n" + "You created account in Car Rental.\n" +
                             "Best regards,\n Car Rentals team"

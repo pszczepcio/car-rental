@@ -49,7 +49,7 @@ public class OrderController {
     }
     
     @RequestMapping(method = RequestMethod.PUT, value = "/orders/{orderID}/status/{status}")
-    public OrderDto updateOrder (@PathVariable Long orderID, @PathVariable boolean status) throws OrderNotFoundException {
+    public OrderDto updateStatusOrder (@PathVariable Long orderID, @PathVariable boolean status) throws OrderNotFoundException {
         Optional<Order> order = orderService.getOrder(orderID);
         order.get().setStatusOrder(status);
         return orderMapper.mapToOrderDto(orderService.saveUpdateStatusOrder(order.orElseThrow(OrderNotFoundException::new)));

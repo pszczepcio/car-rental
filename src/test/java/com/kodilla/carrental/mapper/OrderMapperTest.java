@@ -77,7 +77,7 @@ public class OrderMapperTest {
         //Then
         assertEquals(LocalDate.now(), order.getDateOfCarRental());
         assertEquals(LocalDate.now().plusDays(3), order.getDateOfReturnCar());
-        assertEquals("email@email.com", order.getUser().getEamil());
+        assertEquals("email@email.com", order.getUser().getEmail());
         assertEquals("Ford", order.getCar().getProducer());
 
         //Cleanup

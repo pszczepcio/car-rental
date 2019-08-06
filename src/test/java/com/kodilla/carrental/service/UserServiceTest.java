@@ -40,7 +40,7 @@ public class UserServiceTest {
         assertEquals("name", userAfterSave.getName());
         assertEquals("surname", userAfterSave.getSurname());
         assertEquals(123456789, userAfterSave.getPhone());
-        assertEquals("email@email.com", userAfterSave.getEamil());
+        assertEquals("email@email.com", userAfterSave.getEmail());
         assertEquals("password", userAfterSave.getPassword());
         assertEquals(false, userAfterSave.isLoginStatus());
 

@@ -47,7 +47,7 @@ public class OrderService {
         }
         if (newOrder.getId() != null) {
             emailService.send(new Mail(
-                    order.getUser().getEamil(),
+                    order.getUser().getEmail(),
                     "New Order in Car Rental Company ",
                     "You placed an order at a car rental company. Order number is: " + order.getOrderNumber() +
                             "\n\nBest regards,\nCar Rentals Team"
