@@ -3,28 +3,21 @@ package com.kodilla.carrental.scheduler;
 import com.kodilla.carrental.WeatherConditions;
 import com.kodilla.carrental.dao.OrderDao;
 import com.kodilla.carrental.domain.*;
-import com.kodilla.carrental.dto.UpdateCarAndEquipment;
-import com.kodilla.carrental.exception.AdditionalEquipmentNotFoundException;
 import com.kodilla.carrental.exception.CarNotFoundException;
 import com.kodilla.carrental.openweather.OpenWeatherClient;
 import com.kodilla.carrental.service.*;
 import com.kodilla.carrental.weather.doimain.Days;
-import com.kodilla.carrental.weather.doimain.ListDto;
 import com.kodilla.carrental.weather.doimain.OpenWeatherDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.OptionalDouble;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 @Component

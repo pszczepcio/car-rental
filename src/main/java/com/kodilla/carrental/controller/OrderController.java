@@ -3,7 +3,6 @@ package com.kodilla.carrental.controller;
 import com.kodilla.carrental.domain.Order;
 import com.kodilla.carrental.dto.CreateOrderDto;
 import com.kodilla.carrental.dto.OrderDto;
-import com.kodilla.carrental.dto.UpdateOrderStatus;
 import com.kodilla.carrental.exception.AdditionalEquipmentNotFoundException;
 import com.kodilla.carrental.exception.CarNotFoundException;
 import com.kodilla.carrental.exception.OrderNotFoundException;
@@ -13,7 +12,6 @@ import com.kodilla.carrental.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
-import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 

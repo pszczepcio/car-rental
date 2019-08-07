@@ -46,13 +46,6 @@ public class CarService {
         return carDao.save(car);
     }
 
-//    public void standardPriceForCabriolet(final Long id) throws CarNotFoundException {
-//        Car car = carDao.findById(id).orElseThrow(CarNotFoundException::new);
-//        double standardPrize = car.getPricePerDay() * 2;
-//        car.setPricePerDay(standardPrize);
-//        carDao.save(car);
-//    }
-
     public void addEquipmentToCar(final UpdateCarAndEquipment updateCarAndEquipment) throws AdditionalEquipmentNotFoundException, CarNotFoundException {
          addEquipment(updateCarAndEquipment);
     }

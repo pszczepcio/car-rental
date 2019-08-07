@@ -3,19 +3,15 @@ package com.kodilla.carrental.mapper;
 import com.kodilla.carrental.dao.AdditionalEquipmentDao;
 import com.kodilla.carrental.dao.CarDao;
 import com.kodilla.carrental.dao.UserDao;
-import com.kodilla.carrental.domain.AdditionalEquipment;
 import com.kodilla.carrental.domain.Order;
 import com.kodilla.carrental.dto.CreateOrderDto;
 import com.kodilla.carrental.dto.OrderDto;
-import com.kodilla.carrental.exception.AdditionalEquipmentNotFoundException;
 import com.kodilla.carrental.exception.CarNotFoundException;
 import com.kodilla.carrental.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -24,18 +24,4 @@ public class OrderDto {
     private Long userId;
     private Long carId;
     private String equipments;
-
-//    public OrderDto(Long id, String orderNumber, LocalDate dateOfOrder,
-//                    LocalDate dateOfCarRental, LocalDate dateOfReturnCar,
-//                    boolean statusOrder, double prize, Long userId, Long carId) {
-//        this.id = id;
-//        this.orderNumber = orderNumber;
-//        this.dateOfOrder = dateOfOrder;
-//        this.dateOfCarRental = dateOfCarRental;
-//        this.dateOfReturnCar = dateOfReturnCar;
-//        this.statusOrder = statusOrder;
-//        this.prize = prize;
-//        this.userId = userId;
-//        this.carId = carId;
-//    }
 }

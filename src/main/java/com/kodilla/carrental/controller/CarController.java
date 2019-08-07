@@ -7,7 +7,6 @@ import com.kodilla.carrental.exception.CarNotFoundException;
 import com.kodilla.carrental.mapper.CarMapper;
 import com.kodilla.carrental.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;

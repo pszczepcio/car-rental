@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,7 +40,6 @@ public class OrderService {
         Order newOrder = new Order();
         User user = userService.getUser(order.getUser().getId());
         if (checkingAvailabilityCar(order) && user.getId()!= null) {
-//            User user = userService.getUser(order.getUser().getId());
             user.getOrderList().add(order);
             newOrder = orderDao.save(order);
             fillingOrder(newOrder);

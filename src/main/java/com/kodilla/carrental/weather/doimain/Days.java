@@ -1,8 +1,6 @@
 package com.kodilla.carrental.weather.doimain;
 
 import lombok.Getter;
-
-import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
