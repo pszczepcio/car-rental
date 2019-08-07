@@ -11,6 +11,7 @@ import com.kodilla.carrental.mapper.CarMapper;
 import com.kodilla.carrental.service.CarService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -206,7 +207,7 @@ public class CarControllerTest {
 
         //When & Then
 
-        mockMvc.perform(put("/v1/car/1/status/true")
+        mockMvc.perform(put("/v1/cars/1/status/true")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id",is(1)))
@@ -245,10 +246,6 @@ public class CarControllerTest {
                 .characterEncoding("UTF-8")
                 .content(jsonContent))
                 .andExpect(status().isOk());
-//
-//       // Mockito.verify(carService,times(1)).addEquipmentToCar(updateCarAndEquipment);
-//
-//         Mockito.verify(carController,times(1)).updateCarEquipment(updateCarAndEquipment);
     }
 
     @Test
@@ -274,7 +271,7 @@ public class CarControllerTest {
         when(carMapper.mapToGetCarDto(carService.updatePrize(carId,prize))).thenReturn(getCarDto);
 
         //When & Then
-        mockMvc.perform(put("/v1/cars/car/1/prize/500")
+        mockMvc.perform(put("/v1/cars/1/prize/500")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.pricePerDay",is(500.0)));

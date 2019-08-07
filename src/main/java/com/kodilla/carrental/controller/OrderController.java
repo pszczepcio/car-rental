@@ -39,7 +39,7 @@ public class OrderController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/orders")
-    public OrderDto createOrder (@RequestBody CreateOrderDto createOrderDto) throws CarNotFoundException, UserNotFoundException, AdditionalEquipmentNotFoundException {
+    public OrderDto createOrder (@RequestBody CreateOrderDto createOrderDto) throws CarNotFoundException, UserNotFoundException {
         return orderMapper.mapToOrderDto(orderService.saveOrder(orderMapper.mapToOrder(createOrderDto)));
     }
 
@@ -56,7 +56,7 @@ public class OrderController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/orders/activation/{orderID}")
-    public void activateOrder (@PathVariable Long orderID) throws OrderNotFoundException, CarNotFoundException, AdditionalEquipmentNotFoundException {
+    public void activateOrder (@PathVariable Long orderID) throws OrderNotFoundException, CarNotFoundException, AdditionalEquipmentNotFoundException, UserNotFoundException {
          orderService.activatingOrder(orderID);
     }
 }

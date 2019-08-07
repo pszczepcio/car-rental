@@ -51,6 +51,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
+    @NotNull
     private User user;
 
     @OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)

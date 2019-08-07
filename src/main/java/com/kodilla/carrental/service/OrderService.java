@@ -39,8 +39,9 @@ public class OrderService {
 
     public Order saveOrder(final Order order) throws UserNotFoundException {
         Order newOrder = new Order();
-        if (checkingAvailabilityCar(order)) {
-            User user = userService.getUser(order.getUser().getId());
+        User user = userService.getUser(order.getUser().getId());
+        if (checkingAvailabilityCar(order) && user.getId()!= null) {
+//            User user = userService.getUser(order.getUser().getId());
             user.getOrderList().add(order);
             newOrder = orderDao.save(order);
             fillingOrder(newOrder);
@@ -124,11 +125,11 @@ public class OrderService {
 
     private List<Long> equipmentPreparation(final String equipments) {
         List<AdditionalEquipment> additionalEquipmentList = additionalEquipmentService.getEquipmentList();
-         List<Long> equipmentsIdList = additionalEquipmentList.stream()
+        List<Long> equipmentsIdList = additionalEquipmentList.stream()
                 .filter(a -> equipments.contains(a.getEquipment()))
                 .map(a -> a.getId())
                 .collect(Collectors.toList());
-         return  equipmentsIdList;
+        return  equipmentsIdList;
     }
 
     private void carPreparation(final Long carId , List<Long> equipmentsIdList) throws CarNotFoundException, AdditionalEquipmentNotFoundException {

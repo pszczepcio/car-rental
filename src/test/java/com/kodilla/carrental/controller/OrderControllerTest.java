@@ -4,32 +4,22 @@ import com.google.gson.*;
 import com.kodilla.carrental.domain.Order;
 import com.kodilla.carrental.domain.User;
 import com.kodilla.carrental.dto.*;
-import com.kodilla.carrental.exception.CarNotFoundException;
-import com.kodilla.carrental.exception.OrderNotFoundException;
-import com.kodilla.carrental.exception.UserNotFoundException;
 import com.kodilla.carrental.localdateadapter.LocalDateAdapter;
-import com.kodilla.carrental.dao.CarDao;
 import com.kodilla.carrental.domain.Car;
-import com.kodilla.carrental.mapper.CarMapper;
 import com.kodilla.carrental.mapper.OrderMapper;
-import com.kodilla.carrental.service.CarService;
 import com.kodilla.carrental.service.OrderService;
-import javafx.beans.binding.When;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
 import java.time.LocalDate;
 import java.util.*;
-
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -37,7 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(OrderController.class)
-
 public class OrderControllerTest {
 
     @Autowired
@@ -211,7 +200,7 @@ public class OrderControllerTest {
         when(orderService.getOrder(orderID)).thenReturn(Optional.ofNullable(order));
         when(orderService.saveUpdateStatusOrder(order)).thenReturn(order1);
         when(orderMapper.mapToOrderDto(order1)).thenReturn(orderDto);
-//        when(orderMapper.mapToOrderDto(orderService.saveUpdateStatusOrder(order.orElseThrow(OrderNotFoundException::new)))).thenReturn(orderDto);
+
         //When & then
         mockMvc.perform(put("/v1/orders/1/status/true")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -220,6 +209,17 @@ public class OrderControllerTest {
     }
 
     @Test
-    public void activateOrder() {
+    public void shouldActivateOrder() throws Exception {
+        //Given
+        Long orderID = 1L;
+        doNothing().when(orderService).activatingOrder(orderID);
+
+        //Given & Then
+        mockMvc.perform(put("/v1/orders/activation/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8"))
+                .andExpect(status().isOk());
+
+        Mockito.verify(orderService,times(1)).activatingOrder(orderID);
     }
 }

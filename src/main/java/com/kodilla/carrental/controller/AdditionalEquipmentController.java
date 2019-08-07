@@ -29,9 +29,9 @@ public class AdditionalEquipmentController {
         return additionalEquipmentMapper.mapToEquipmentDtoList(additionalEquipmentService.getEquipmentList());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/equipments/{equipmentsId}")
-    public EquipmentDto getEquipmentDto(@PathVariable Long equipmentsId) throws AdditionalEquipmentNotFoundException {
-        return additionalEquipmentMapper.mapToEquipmentDto(additionalEquipmentService.getEquipment(equipmentsId).orElseThrow(AdditionalEquipmentNotFoundException::new));
+    @RequestMapping(method = RequestMethod.GET, value = "/equipments/{equipmentId}")
+    public EquipmentDto getEquipmentDto(@PathVariable Long equipmentId) throws AdditionalEquipmentNotFoundException {
+        return additionalEquipmentMapper.mapToEquipmentDto(additionalEquipmentService.getEquipment(equipmentId).orElseThrow(AdditionalEquipmentNotFoundException::new));
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/equipments")
