@@ -5,124 +5,89 @@ import com.kodilla.carrental.domain.AdditionalEquipment;
 import com.kodilla.carrental.exception.AdditionalEquipmentNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class AdditionalEquipmentServiceTest {
-
-    @Autowired
+    @InjectMocks
     private AdditionalEquipmentService additionalEquipmentService;
+
+    @Mock
+    private AdditionalEquipmentDao additionalEquipmentDao;
 
     @Test
     public void saveEquipment() {
         //Given
         AdditionalEquipment additionalEquipment = new AdditionalEquipment("cb", 20.0);
-        //When
-        additionalEquipmentService.saveEquipment(additionalEquipment);
-        AdditionalEquipment equipmentAfterSave = additionalEquipmentService.saveEquipment(additionalEquipment);
-        //Then
-        assertEquals("cb", equipmentAfterSave.getEquipment());
-        assertEquals(20.0, equipmentAfterSave.getPrize(), 0.01);
-        assertNotNull(equipmentAfterSave.getId());
+        AdditionalEquipment additionalEquipmentAfterSave = new AdditionalEquipment(
+                1L, "cb", 20.0, new ArrayList<>());
 
-        //Cleanup
-        additionalEquipmentService.deleteEquipment(additionalEquipment.getId());
+        //When && Then
+        when(additionalEquipmentDao.save(additionalEquipment)).thenReturn(additionalEquipmentAfterSave);
+        AdditionalEquipment equipment = additionalEquipmentService.saveEquipment(additionalEquipment);
+        //Then
+        assertEquals(1L, equipment.getId().longValue());
+        assertEquals("cb", equipment.getEquipment());
+        assertEquals(20.0, equipment.getPrize(), 0.01);
+        assertEquals(new ArrayList<>(), equipment.getCarsList());
     }
 
     @Test
     public void shouldGetAdditionalEquipment() throws AdditionalEquipmentNotFoundException {
         //Given
-        AdditionalEquipment additionalEquipment = new AdditionalEquipment("towbar", 30.0);
+        Long id = 1L;
+        AdditionalEquipment additionalEquipment = new AdditionalEquipment(1L, "towbar", 30.0, new ArrayList<>());
 
-        //When
-        additionalEquipmentService.saveEquipment(additionalEquipment);
-        AdditionalEquipment equipmentAfterSave = additionalEquipmentService.getEquipment(additionalEquipment.getId())
-                .orElseThrow(AdditionalEquipmentNotFoundException::new);
-        String equipment = equipmentAfterSave.getEquipment();
-        double prize = equipmentAfterSave.getPrize();
-        Long equipmentId = equipmentAfterSave.getId();
+        //When && Then
+        when(additionalEquipmentDao.findById(id)).thenReturn(Optional.of(additionalEquipment));
+        AdditionalEquipment equipment = additionalEquipmentService.getEquipment(id).orElseThrow(AdditionalEquipmentNotFoundException::new);
 
-        //Then
-        assertEquals("towbar", equipment);
-        assertEquals(30.0, prize, 0.1);
-        assertEquals(additionalEquipment.getId(), equipmentId);
-        assertNotNull(equipmentId);
-
-        //Cleanup
-        additionalEquipmentService.deleteEquipment(additionalEquipment.getId());
+        assertEquals(1L, equipment.getId().longValue());
+        assertEquals("towbar", equipment.getEquipment());
+        assertEquals(30, equipment.getPrize(), 0.01);
+        assertEquals(new ArrayList<>(), equipment.getCarsList());
     }
 
     @Test
     public void shouldGetAdditionalEquipmentList()  {
         //Given
-        AdditionalEquipment towbar = new AdditionalEquipment("towbar", 30.0);
-        AdditionalEquipment cbRadio = new AdditionalEquipment("cb-Radio", 35.0);
-        AdditionalEquipment railings = new AdditionalEquipment("railings", 32.50);
-        List<AdditionalEquipment> equipmentList;
+        AdditionalEquipment towbar = new AdditionalEquipment(1L, "towbar", 30.0, new ArrayList<>());
+        AdditionalEquipment cbRadio = new AdditionalEquipment(2L, "cb-Radio", 35.0, new ArrayList<>());
+        AdditionalEquipment railings = new AdditionalEquipment(3L, "railings", 32.50, new ArrayList<>());
+        List<AdditionalEquipment> equipmentList = new ArrayList<>();
+        equipmentList.add(towbar);
+        equipmentList.add(cbRadio);
+        equipmentList.add(railings);
 
-        //When
-         additionalEquipmentService.saveEquipment(towbar);
-         additionalEquipmentService.saveEquipment(cbRadio);
-         additionalEquipmentService.saveEquipment(railings);
-         equipmentList = additionalEquipmentService.getEquipmentList();
-         int sizeList = equipmentList.size();
-         String equipmentOne = equipmentList.get(0).getEquipment();
-         double prizeOne = equipmentList.get(0).getPrize();
-         Long idOne = equipmentList.get(0).getId();
-
-        String equipmentThree = equipmentList.get(2).getEquipment();
-        double prizeThree = equipmentList.get(2).getPrize();
-        Long idThree = equipmentList.get(2).getId();
-
+        //When && Then
+        when(additionalEquipmentService.getEquipmentList()).thenReturn(equipmentList);
+        List<AdditionalEquipment> equipments = additionalEquipmentService.getEquipmentList();
         //Then
-        assertEquals(3, sizeList);
-        assertEquals("towbar", equipmentOne);
-        assertEquals(30.0, prizeOne, 0.1);
-        assertEquals(towbar.getId(), idOne);
-        assertEquals("railings", equipmentThree);
-        assertEquals(32.5, prizeThree, 0.1);
-        assertEquals(railings.getId(), idThree);
-
-        //Cleanup
-        additionalEquipmentService.deleteEquipment(railings.getId());
-        additionalEquipmentService.deleteEquipment(cbRadio.getId());
-        additionalEquipmentService.deleteEquipment(towbar.getId());
+        assertEquals(3, equipments.size());
+        assertEquals("towbar", equipments.get(0).getEquipment());
+        assertEquals(1L, equipments.get(0).getId().longValue());
+        assertEquals("cb-Radio", equipments.get(1).getEquipment());
+        assertEquals("railings", equipments.get(2).getEquipment());
+        assertEquals(32.5, equipments.get(2).getPrize(), 0.1);
     }
 
     @Test
-    public void shouldDeleteAdditionalEquipmen()  {
+    public void shouldDeleteEquipment() {
         //Given
-        AdditionalEquipment towbar = new AdditionalEquipment("towbar", 30.0);
-        AdditionalEquipment cbRadio = new AdditionalEquipment("cb-Radio", 35.0);
-        AdditionalEquipment railings = new AdditionalEquipment("railings", 32.50);
-        List<AdditionalEquipment> equipmentList;
-        List<AdditionalEquipment> equipmentListAfterDelete;
+        Long id = 1L;
 
-        //When
-        additionalEquipmentService.saveEquipment(towbar);
-        additionalEquipmentService.saveEquipment(cbRadio);
-        additionalEquipmentService.saveEquipment(railings);
-        equipmentList = additionalEquipmentService.getEquipmentList();
-        int equipmentSize = equipmentList.size();
-        Long idOne = towbar.getId();
-        Long idTwo = cbRadio.getId();
-        Long idThree = railings.getId();
-
-        //Then
-        assertEquals(3, equipmentSize);
-        additionalEquipmentService.deleteEquipment(idOne);
-        additionalEquipmentService.deleteEquipment(idTwo);
-        additionalEquipmentService.deleteEquipment(idThree);
-        equipmentListAfterDelete = additionalEquipmentService.getEquipmentList();
-        int equipmentListSizeAfterDelete = equipmentListAfterDelete.size();
-        assertEquals(0, equipmentListSizeAfterDelete);
+        //When && Then
+        additionalEquipmentService.deleteEquipment(id);
+        verify(additionalEquipmentDao, times(1)).deleteById(id);
     }
 }

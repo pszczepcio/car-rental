@@ -1,5 +1,8 @@
 package com.kodilla.carrental.service;
 
+import com.kodilla.carrental.dao.InvoiceDao;
+import com.kodilla.carrental.dao.OrderDao;
+import com.kodilla.carrental.dao.UserDao;
 import com.kodilla.carrental.domain.Car;
 import com.kodilla.carrental.domain.Invoice;
 import com.kodilla.carrental.domain.Order;
@@ -7,48 +10,65 @@ import com.kodilla.carrental.domain.User;
 import com.kodilla.carrental.exception.InvoiceNotFoundException;
 import com.kodilla.carrental.exception.OrderNotFoundException;
 import com.kodilla.carrental.exception.UserNotFoundException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Transactional
 public class InvoiceServiceTest {
 
-    @Autowired
+    private User user;
+    private Car car;
+    private Order order;
+    private Order secondOrder;
+
+    @InjectMocks
     private InvoiceService invoiceService;
 
-    @Autowired
-    private CarService carService;
+    @Mock
+    private UserDao userDao;
 
-    @Autowired
-    private UserService userService;
+    @Mock
+    private OrderDao orderDao;
 
-    @Autowired
-    private OrderService orderService;
+    @Mock
+    private InvoiceDao invoiceDao;
 
-    @Test
-    public void saveInvoice() throws UserNotFoundException, OrderNotFoundException, InvoiceNotFoundException {
-        //Given
-        User user = new User(
+    @Before
+    public void init() {
+       user = new User(
+                1L,
                 "name",
                 "surname",
                 123456789,
                 "user@email.com",
                 "password",
-                false
+                false,
+                new ArrayList<>(),
+                new ArrayList<>()
         );
 
-        Car car = new Car().builder()
+       car = new Car().builder()
                 .carClass("Premium")
                 .typeOfCar("Sedan")
                 .producer("Ford")
@@ -60,136 +80,94 @@ public class InvoiceServiceTest {
                 .dayOfProduction(LocalDate.of(2010,1,1))
                 .build();
 
-        Order order = new Order(
+        order = new Order(
+                1L,
+                "Order/10.10.2019/1",
+                LocalDate.now(),
                 LocalDate.now(),
                 LocalDate.now().plusDays(5),
+                false,
+                500,
+                "cb",
                 user,
                 car
         );
 
-        Invoice invoice = new Invoice(user, order);
-        userService.saveUser(user);
-        carService.saveCar(car);
-        orderService.saveOrder(order);
-        String orderNumber = orderService.getOrder(order.getId()).orElseThrow(OrderNotFoundException::new).getOrderNumber();
-        String invoiceNumber = orderNumber.replace("Order", "Invoice");
-
-        //When
-        invoiceService.saveInvoice(invoice);
-        Long invoiceId = invoiceService.getInvoice(invoice.getId()).orElseThrow(InvoiceNotFoundException::new).getId();
-        Invoice invoiceAfterSave = invoiceService.getInvoice(invoiceId).orElseThrow(InvoiceNotFoundException::new);
-
-        //Then
-        assertNotNull(invoiceId);
-        assertEquals(invoiceNumber, invoiceAfterSave.getInvoiceNumber());
-        assertEquals("name", invoiceAfterSave.getUser().getName());
-        assertEquals(orderNumber, invoiceAfterSave.getOrder().getOrderNumber());
-        assertEquals("Sedan", invoiceAfterSave.getOrder().getCar().getTypeOfCar());
-
-        //Cleanup
-        orderService.deleteOrder(order.getId());
-        invoiceService.deleteInvoice(invoiceId);
-
-        carService.deleteCar(car.getId());
-        userService.deleteUser(user.getId());
+        secondOrder = new Order(
+                2L,
+                "Order/15.10.2019/2",
+                LocalDate.now().plusDays(5),
+                LocalDate.now().plusDays(5),
+                LocalDate.now().plusDays(10),
+                false,
+                500,
+                "cb",
+                user,
+                car);
     }
 
     @Test
-    public void getInvoiceList() throws UserNotFoundException, OrderNotFoundException {
+    public void saveInvoice() throws UserNotFoundException, OrderNotFoundException {
         //Given
-        User user = new User(
-                "name",
-                "surname",
-                123456789,
-                "user@email.com",
-                "password",
-                false
-        );
-
-        User user1 = new User(
-                "user1",
-                "surname1",
-                123456789,
-                "user1@email.com",
-                "password1",
-                false
-        );
-
-        Car car = new Car().builder()
-                .carClass("Premium")
-                .typeOfCar("Sedan")
-                .producer("Ford")
-                .model("Focus")
-                .availability(true)
-                .numberOfSeats(5)
-                .color("white")
-                .pricePerDay(350)
-                .dayOfProduction(LocalDate.of(2010,1,1))
-                .build();
-
-        Car car1 = new Car().builder()
-                .carClass("Basic")
-                .typeOfCar("Hatchback")
-                .producer("Ford")
-                .model("Fiesta")
-                .availability(true)
-                .numberOfSeats(5)
-                .color("Red")
-                .pricePerDay(250)
-                .dayOfProduction(LocalDate.of(2005,1,1))
-                .build();
-
-        Order order = new Order(
-                LocalDate.now(),
-                LocalDate.now().plusDays(5),
-                user,
-                car
-        );
-
-        Order order1 = new Order(
-                LocalDate.now().plusDays(10),
-                LocalDate.now().plusDays(15),
-                user1,
-                car1
-        );
-
-        userService.saveUser(user);
-        userService.saveUser(user1);
-        carService.saveCar(car);
-        carService.saveCar(car1);
-        orderService.saveOrder(order);
-        orderService.saveOrder(order1);
-        Invoice invoice = new Invoice(user, order);
-        Invoice invoice1 = new Invoice(user1, order1);
-
+        Invoice invoiceAfterSave = new Invoice(1L, "Invoice/10.10.2019/1", user, order);
         //When
-        invoiceService.saveInvoice(invoice);
-        invoiceService.saveInvoice(invoice1);
-        List<Invoice> invoiceList = invoiceService.getInvoiceList();
+        Invoice invoice = new Invoice(user, order);
+        when(userDao.findById(1L)).thenReturn(ofNullable(user));
+        when(userDao.save(user)).thenReturn(user);
+        when(orderDao.findById(1L)).thenReturn(ofNullable(order));
+        when(invoiceDao.save(invoice)).thenReturn(invoiceAfterSave);
+        when(invoiceService.saveInvoice(invoice)).thenReturn(invoiceAfterSave);
+        Invoice newInvoice = invoiceService.saveInvoice(invoice);
 
         //Then
-        assertEquals(2, invoiceList.size());
-        assertEquals("Fiesta", invoiceList.get(1).getOrder().getCar().getModel());
-
-        //Cleanup
-        orderService.deleteOrder(order1.getId());
-        orderService.deleteOrder(order.getId());
-
-        invoiceService.deleteInvoice(invoice1.getId());
-        invoiceService.deleteInvoice(invoice.getId());
-
-        carService.deleteCar(car1.getId());
-        carService.deleteCar(car.getId());
-
-        userService.deleteUser(user1.getId());
-        userService.deleteUser(user.getId());
+        assertEquals(1L, newInvoice.getId().longValue());
+        assertEquals(123456789, newInvoice.getUser().getPhone());
+        assertEquals("Invoice/10.10.2019/1", newInvoice.getInvoiceNumber());
+        assertEquals("name", newInvoice.getUser().getName());
+        assertEquals("Order/10.10.2019/1", newInvoice.getOrder().getOrderNumber());
+        assertEquals("Sedan", newInvoice.getOrder().getCar().getTypeOfCar());
     }
 
     @Test
     public void getInvoice() {
+        //Given
+        Long id = 1L;
+        Invoice invoice = new Invoice(1L, "Invoice/10.10.2019/1", user, order);
+        //When
+       when(invoiceDao.findById(id)).thenReturn(of(invoice));
+       Optional<Invoice> getInvoice = invoiceService.getInvoice(id);
+       //Then
+        assertEquals(1L, getInvoice.get().getId().longValue());
+        assertEquals("Invoice/10.10.2019/1", getInvoice.get().getInvoiceNumber());
+        assertEquals("user@email.com", getInvoice.get().getUser().getEmail());
+        assertEquals("Order/10.10.2019/1", getInvoice.get().getOrder().getOrderNumber());
     }
 
     @Test
-    public void deleteInvoice() {
+    public void shouldDeleteInvoice() {
+        //Given && When && Then
+        Long id = 1L;
+        invoiceService.deleteInvoice(id);
+        verify(invoiceDao, times(1)).deleteById(id);
     }
+
+    @Test
+    public void shouldGetInvoiceList() {
+        //Given
+        List<Invoice> invoiceList = new ArrayList<>();
+        Invoice invoice1 = new Invoice(1L, "Invoice/10.10.2019/1", user, order);
+        Invoice invoice2 = new Invoice(2L, "Invoice/15.10.2019/2", user, secondOrder);
+        invoiceList.add(invoice1);
+        invoiceList.add(invoice2);
+
+        //When
+        when(invoiceDao.findAll()).thenReturn(invoiceList);
+        List<Invoice> invoices = invoiceService.getInvoiceList();
+
+        //Then
+        assertEquals(2, invoices.size());
+        assertEquals("Invoice/10.10.2019/1", invoices.get(0).getInvoiceNumber());
+        assertEquals("Invoice/15.10.2019/2", invoices.get(1).getInvoiceNumber());
+    }
+
 }
