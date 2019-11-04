@@ -18,8 +18,8 @@ public class UserMapper {
                 createUserDto.getSurname(),
                 createUserDto.getPhone(),
                 createUserDto.getEamil(),
-                createUserDto.getPassword(),
-                false);
+                createUserDto.getPassword()
+                );
     }
 
     public List<UserDtoList> getUsersDtoList(final List<User> userList) {

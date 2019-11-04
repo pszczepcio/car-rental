@@ -61,13 +61,13 @@ public class User {
     private List<Invoice> invoiceList = new ArrayList<>();
 
     public User(@NotNull String name, @NotNull String surname, @NotNull int phone,
-                @NotNull String eamil, @NotNull String password, boolean loginStatus) {
+                @NotNull String eamil, @NotNull String password) {
         this.name = name;
         this.surname = surname;
         this.phone = phone;
         this.email = eamil;
         this.password = password;
-        this.loginStatus = loginStatus;
+        this.loginStatus = false;
         this.orderList = new ArrayList<>();
         this.invoiceList = new ArrayList<>();
     }

@@ -1,5 +1,6 @@
 package com.kodilla.carrental.service;
 
+
 import com.kodilla.carrental.domain.User;
 import com.kodilla.carrental.exception.UserNotFoundException;
 import org.junit.Test;
@@ -7,10 +8,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import java.util.List;
-
 import static org.junit.Assert.*;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -27,8 +27,7 @@ public class UserServiceTest {
                 "surname",
                 123456789,
                 "email@email.com",
-                "password",
-                false
+                "password"
         );
 
         //When
@@ -49,15 +48,14 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getUsersList() throws UserNotFoundException {
+    public void getUsersList() {
         //Given
         User marcin = new User(
                 "Marcin",
                 "Kowalski",
                 123456789,
                 "marcin@email.com",
-                "password",
-                false
+                "password"
         );
 
         User romek = new User(
@@ -65,8 +63,7 @@ public class UserServiceTest {
                 "Czerwony",
                 987654321,
                 "romek@email.com",
-                "password1",
-                false
+                "password1"
         );
 
         //When

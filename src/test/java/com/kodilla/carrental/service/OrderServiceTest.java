@@ -39,8 +39,7 @@ public class OrderServiceTest {
                 "surname",
                 123456789,
                 "email@email.com",
-                "password",
-                false
+                "password"
         );
 
         Car car = new Car().builder()
@@ -89,8 +88,7 @@ public class OrderServiceTest {
                 "surname",
                 123456789,
                 "user@email.com",
-                "password",
-                false
+                "password"
         );
 
         User user1 = new User(
@@ -98,8 +96,7 @@ public class OrderServiceTest {
                 "surname1",
                 987654321,
                 "user1@email.com",
-                "password1",
-                false
+                "password1"
         );
 
 
@@ -174,8 +171,7 @@ public class OrderServiceTest {
                 "y",
                 123456789,
                 "email@email.com",
-                "password",
-                false
+                "password"
         );
 
         Car car = new Car().builder()
@@ -224,8 +220,7 @@ public class OrderServiceTest {
                 "surname",
                 123456789,
                 "user@email.com",
-                "password",
-                false
+                "password"
         );
 
         Car car = new Car().builder()
@@ -261,6 +256,4 @@ public class OrderServiceTest {
         carService.deleteCar(car.getId());
 
     }
-
-
 }

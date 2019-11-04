@@ -44,8 +44,7 @@ public class OrderMapperTest {
                 "surname",
                 123456789,
                 "email@email.com",
-                "password",
-                false
+                "password"
         );
 
         Car car = new Car().builder()

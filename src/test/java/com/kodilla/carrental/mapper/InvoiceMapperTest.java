@@ -64,8 +64,7 @@ public class InvoiceMapperTest {
                 "surname",
                 123456789,
                 "email@email.com",
-                "password",
-                false
+                "password"
         );
 
         Order order = new Order(
